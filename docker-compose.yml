@@ -1,0 +1,44 @@
+services:
+  # minio:
+  #   image: minio/minio:latest
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+  #   environment:
+  #     MINIO_ROOT_USER: minioadmin
+  #     MINIO_ROOT_PASSWORD: minioadmin
+  #   volumes:
+  #     - minio_data:/data
+  #   command: server /data --console-address ":9001"
+
+  mage:
+    image: mageai/mageai:latest
+    command: mage start ${PROJECT_NAME}
+    env_file:
+      - .env
+    # build:
+    #   context: ./mage
+    #   dockerfile: Dockerfile.yml
+    ports:
+      - "6789:6789"
+    volumes:
+      - ./mage:/home/src
+    # depends_on:
+    #   - minio
+
+  # api:
+  #   build:
+  #     context: ./api
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     MINIO_ACCESS_KEY_ID: minioadmin
+  #     MINIO_SECRET_ACCESS_KEY: minioadmin
+  #     MINIO_ENDPOINT_URL: http://minio:9000
+  #   depends_on:
+  #     - minio
+
+volumes:
+  minio_data:
+  mage:
